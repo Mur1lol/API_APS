@@ -1,15 +1,20 @@
 import { Funcionario } from '../entity/Funcionario';
 import { AppDataSource } from "../data-source" // Importe a conexão correta do PostgreSQL
 import { hash, compare } from 'bcryptjs';
+import { sign } from 'jsonwebtoken';
+import { config } from 'dotenv'
 
+config();
+
+const secretKey = process.env.TOKEN; 
 const repository = AppDataSource.getRepository(Funcionario);
 
-const getAll = async (): Promise<Funcionario[]> => {
+const getFuncionarioModel = async (): Promise<Funcionario[]> => {
     const funcionarios = await repository.find();
     return funcionarios;
 };
 
-const createFuncionario = async (dados): Promise<Funcionario> => {
+const createFuncionarioModel = async (dados): Promise<Funcionario> => {
     console.log("Inserting a new data into the database...");
 
     const { nome, email, senha } = dados;
@@ -31,7 +36,7 @@ const createPasswordHash = async (senha: string): Promise<string> => {
     return hash(senha, saltRounds);
 };
 
-const autenticaFuncionario = async (dados): Promise<Funcionario> => {
+const autenticaFuncionarioModel = async (dados): Promise<Funcionario> => {
     const { email, senha } = dados;
 
     const funcionario = await repository.findOne({ 
@@ -39,20 +44,21 @@ const autenticaFuncionario = async (dados): Promise<Funcionario> => {
     });
 
     if (!funcionario) {
-        throw new Error('Funcionario não encontrado');
+        throw new Error('Cliente não encontrado');
     }
 
     const autenticado = await compare(senha, funcionario.senha);
 
     if (autenticado) {
-        return funcionario;
+        const token = sign({ id: funcionario.id, email: funcionario.email }, secretKey, { expiresIn: '1h' });
+        return token;
     } else {
         throw new Error('Credenciais inválidas');
     }
 };
 
 export {
-    getAll,
-    createFuncionario,
-    autenticaFuncionario,
+    getFuncionarioModel,
+    createFuncionarioModel,
+    autenticaFuncionarioModel,
 };

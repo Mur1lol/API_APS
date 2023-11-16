@@ -34,6 +34,76 @@ const getAll = async (): Promise<Agendamento[]> => {
     return agendamentos;
 };
 
+const getAgendamentoMesModel = async (date): Promise<Agendamento[]> => {
+    const { data } = date;
+    const agendamentos = await repository.find({
+        where: {
+            data: data
+        },
+        select: {
+            cliente: {
+              id: true,
+              nome: true
+            },
+            funcionario_funcao: {
+                id: true,
+                funcionario: {
+                    id: true,
+                    nome: true
+                },
+                funcao: {
+                    id: true,
+                    nome_funcao: true
+                }
+            }
+        },
+        relations: {
+            cliente: true,
+            funcionario_funcao: {
+                funcionario: true,
+                funcao: true
+            }
+        },
+    });
+
+    return agendamentos;
+}
+
+const getAgendamentoClienteModel = async (clienteId): Promise<Agendamento[]> => {
+    const { userId } = clienteId;
+    const agendamentos = await repository.find({
+        where: {
+            cliente: { id: userId }
+        },
+        select: {
+            cliente: {
+              id: true,
+              nome: true
+            },
+            funcionario_funcao: {
+                id: true,
+                funcionario: {
+                    id: true,
+                    nome: true
+                },
+                funcao: {
+                    id: true,
+                    nome_funcao: true
+                }
+            }
+        },
+        relations: {
+            cliente: true,
+            funcionario_funcao: {
+                funcionario: true,
+                funcao: true
+            }
+        },
+    });
+
+    return agendamentos;
+}
+
 const createAgendamento = async (dados): Promise<Agendamento> => {
     console.log("Inserting a new data into the database...");
 
@@ -53,5 +123,7 @@ const createAgendamento = async (dados): Promise<Agendamento> => {
 
 export {
     getAll,
+    getAgendamentoMesModel,
+    getAgendamentoClienteModel,
     createAgendamento,
 }

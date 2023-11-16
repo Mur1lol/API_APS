@@ -1,18 +1,18 @@
 import { Request, Response } from 'express';
-import { autenticaFuncionario, createFuncionario, getAll } from '../models/funcionarioModel';
+import { getFuncionarioModel, createFuncionarioModel, autenticaFuncionarioModel } from '../models/funcionarioModel';
 
-const getAlls = async (req: Request, res: Response) => {
+const getFuncionario = async (req: Request, res: Response) => {
     try {
-        const dados = await getAll();
+        const dados = await getFuncionarioModel();
         return res.status(200).json(dados);
     } catch (error) {
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 };
 
-const createFuncionarios = async(req, res) => {
+const createFuncionario = async(req, res) => {
     try {
-        const dados = await createFuncionario(req.body);
+        const dados = await createFuncionarioModel(req.body);
         return res.status(200).json(dados);
     } catch (error) {
         console.error('Erro durante o registro:', error);
@@ -20,9 +20,9 @@ const createFuncionarios = async(req, res) => {
     }
 };
 
-const autenticaFuncionarios = async (req, res) => {
+const autenticaFuncionario = async (req, res) => {
     try {
-        const dados = await autenticaFuncionario(req.body);
+        const dados = await autenticaFuncionarioModel(req.body);
         return res.status(200).json({ sucess: 'Usuario autenticado'});
     } catch (error) {
         return res.status(401).json({ error: 'Credenciais inválidas' });
@@ -30,7 +30,7 @@ const autenticaFuncionarios = async (req, res) => {
 };
 
 export { 
-    getAlls, 
-    createFuncionarios,
-    autenticaFuncionarios,
+    getFuncionario, 
+    createFuncionario,
+    autenticaFuncionario,
 }

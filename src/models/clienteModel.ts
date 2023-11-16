@@ -1,15 +1,21 @@
 import { Cliente } from '../entity/Cliente';
 import { AppDataSource } from "../data-source" // Importe a conexão correta do PostgreSQL
 import { hash, compare } from 'bcryptjs';
+import { sign } from 'jsonwebtoken';
+import { config } from 'dotenv'
 
+config();
+
+const secretKey = process.env.TOKEN; 
 const repository = AppDataSource.getRepository(Cliente);
 
-const getAll = async (): Promise<Cliente[]> => {
-    const clientes = await repository.find();
+const getClienteModel = async (clienteId): Promise<Cliente[]> => {
+    const { userId } = clienteId;
+    const clientes = await repository.find({ where: { id: userId }});
     return clientes;
 };
 
-const createCliente = async (dados): Promise<Cliente> => {
+const createClienteModel = async (dados): Promise<Cliente> => {
     console.log("Inserting a new data into the database...");
 
     const { nome, email, senha } = dados;
@@ -31,7 +37,7 @@ const createPasswordHash = async (senha: string): Promise<string> => {
     return hash(senha, saltRounds);
 };
 
-const autenticaCliente = async (dados): Promise<Cliente> => {
+const autenticaClienteModel = async (dados): Promise<Cliente> => {
     const { email, senha } = dados;
 
     const cliente = await repository.findOne({ 
@@ -45,14 +51,15 @@ const autenticaCliente = async (dados): Promise<Cliente> => {
     const autenticado = await compare(senha, cliente.senha);
 
     if (autenticado) {
-        return cliente;
+        const token = sign({ id: cliente.id, email: cliente.email }, secretKey, { expiresIn: '1h' });
+        return token;
     } else {
         throw new Error('Credenciais inválidas');
     }
 };
 
 export {
-    getAll,
-    createCliente,
-    autenticaCliente,
+    getClienteModel,
+    createClienteModel,
+    autenticaClienteModel,
 };

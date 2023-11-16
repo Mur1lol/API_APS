@@ -2,12 +2,6 @@ import "reflect-metadata"
 import { DataSource } from "typeorm"
 import { config } from 'dotenv';
 
-import { Cliente } from "./entity/Cliente";
-import { Funcionario } from "./entity/Funcionario";
-import { Funcao } from "./entity/Funcao";
-import { Funcionario_Funcao } from "./entity/Funcionario_Funcao";
-import { Agendamento } from "./entity/Agendamento";
-
 config(); // Carregar variáveis de ambiente a partir do arquivo .env
 
 const AppDataSource = new DataSource({
@@ -21,7 +15,7 @@ const AppDataSource = new DataSource({
 
     synchronize: true,
     logging: false,
-    entities: [Cliente, Funcionario, Funcao, Funcionario_Funcao, Agendamento],
+    entities: ["src/entity/**/*.ts"],
     migrations: [],
     subscribers: [],
 })

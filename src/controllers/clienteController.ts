@@ -1,18 +1,18 @@
 import { Request, Response } from 'express';
-import { autenticaCliente, createCliente, getAll } from '../models/clienteModel';
+import { autenticaClienteModel, createClienteModel, getClienteModel } from '../models/clienteModel';
 
-const getAlls = async (req: Request, res: Response) => {
+const getCliente = async (req: Request, res: Response) => {
     try {
-        const dados = await getAll();
+        const dados = await getClienteModel(req.body);
         return res.status(200).json(dados);
     } catch (error) {
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 };
 
-const createClientes = async(req, res) => {
+const createCliente = async(req, res) => {
     try {
-        const dados = await createCliente(req.body);
+        const dados = await createClienteModel(req.body);
         return res.status(200).json(dados);
     } catch (error) {
         console.error('Erro durante o registro:', error);
@@ -20,17 +20,17 @@ const createClientes = async(req, res) => {
     }
 };
 
-const autenticaClientes = async (req, res) => {
+const autenticaCliente = async (req, res) => {
     try {
-        const dados = await autenticaCliente(req.body);
-        return res.status(200).json({ sucess: 'Usuario autenticado'});
+        const dados = await autenticaClienteModel(req.body);
+        return res.status(200).json({ token: dados });
     } catch (error) {
-        return res.status(401).json({ error: 'Credenciais inválidas' });
+        return res.status(401).json({ error: 'Credenciais inválidas'+error });
     }
 };
 
 export { 
-    getAlls, 
-    createClientes,
-    autenticaClientes,
+    getCliente, 
+    createCliente,
+    autenticaCliente,
 }

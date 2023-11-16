@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Unique, EventSubscriber, BeforeInsert } from "typeorm"
 import { Agendamento } from "./Agendamento"
 
+@Unique(['email'])
 @Entity()
 export class Cliente {
 
