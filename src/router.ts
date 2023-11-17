@@ -9,20 +9,21 @@ import * as agendamentoController  from './controllers/agendamentoController';
 
 import { validateEmail } from './middlewares/validateEmail';
 import { verifyToken } from './middlewares/verifyToken';
+import { validateFieldsCadastro, validateFieldsLogin , validateFieldsAgenda } from './middlewares/validateFields';
 
 /**********************
  * Cliente            *
  **********************/
 router.get('/cliente', verifyToken, clienteController.getCliente);
-router.post('/cliente', validateEmail, clienteController.createCliente);
-router.post('/cliente/login', clienteController.autenticaCliente);
+router.post('/cliente', validateFieldsCadastro, validateEmail, clienteController.createCliente);
+router.post('/cliente/login', validateFieldsLogin, clienteController.autenticaCliente);
 
 /**********************
  * Funcionario        *
  **********************/
 router.get('/funcionario', verifyToken, funcionarioController.getFuncionario);
-router.post('/funcionario', validateEmail, funcionarioController.createFuncionario);
-router.post('/funcionario/login', funcionarioController.autenticaFuncionario);
+router.post('/funcionario', validateFieldsCadastro, validateEmail, funcionarioController.createFuncionario);
+router.post('/funcionario/login', validateFieldsLogin, funcionarioController.autenticaFuncionario);
 
 /**********************
  * Funcao             *
@@ -41,7 +42,7 @@ router.post('/funci_funcao', funci_funcaoController.createFuncionario_Funcaos);
  **********************/
 router.get('/agendamento', agendamentoController.getAlls);
 router.get('/agendamento/data/:data', agendamentoController.getAgendamentoMes);
-router.get('/agendamento/cliente', verifyToken, agendamentoController.getAgendamentoCliente)
-router.post('/agendamento', agendamentoController.createAgendamentos);
+router.get('/agendamento/cliente', verifyToken, agendamentoController.getAgendamentoCliente);
+router.post('/agendamento', validateFieldsAgenda, agendamentoController.createAgendamentos);
 
 export default router ;

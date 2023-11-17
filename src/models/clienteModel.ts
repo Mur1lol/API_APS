@@ -9,9 +9,8 @@ config();
 const secretKey = process.env.TOKEN; 
 const repository = AppDataSource.getRepository(Cliente);
 
-const getClienteModel = async (clienteId): Promise<Cliente[]> => {
-    const { userId } = clienteId;
-    const clientes = await repository.find({ where: { id: userId }});
+const getClienteModel = async (userId): Promise<Cliente> => {
+    const clientes = await repository.findOne({ where: { id: userId }});
     return clientes;
 };
 

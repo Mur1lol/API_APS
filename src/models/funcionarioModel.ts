@@ -9,8 +9,8 @@ config();
 const secretKey = process.env.TOKEN; 
 const repository = AppDataSource.getRepository(Funcionario);
 
-const getFuncionarioModel = async (): Promise<Funcionario[]> => {
-    const funcionarios = await repository.find();
+const getFuncionarioModel = async (userId): Promise<Funcionario> => {
+    const funcionarios = await repository.findOne({ where: {id: userId }});
     return funcionarios;
 };
 
@@ -44,7 +44,7 @@ const autenticaFuncionarioModel = async (dados): Promise<Funcionario> => {
     });
 
     if (!funcionario) {
-        throw new Error('Cliente não encontrado');
+        throw new Error('Funcionario não encontrado');
     }
 
     const autenticado = await compare(senha, funcionario.senha);
