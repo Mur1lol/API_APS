@@ -1,64 +1,82 @@
 import { Funcionario } from '../entity/Funcionario';
-import { AppDataSource } from "../data-source" // Importe a conexão correta do PostgreSQL
+import { AppDataSource } from "../data-source"
 import { hash, compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import { config } from 'dotenv'
 
 config();
 
-const secretKey = process.env.TOKEN; 
+type AutenticationResult = {
+  token: string;
+  funcionario: {
+    id: number;
+    nome: string;
+    email: string;
+    tipo: string;
+  }
+}
+
+const secretKey = process.env.TOKEN;
 const repository = AppDataSource.getRepository(Funcionario);
 
 const getFuncionarioModel = async (userId): Promise<Funcionario> => {
-    const funcionarios = await repository.findOne({ where: {id: userId }});
-    return funcionarios;
+  const funcionarios = await repository.findOne({ where: { id: userId } });
+  return funcionarios;
 };
 
 const createFuncionarioModel = async (dados): Promise<Funcionario> => {
-    console.log("Inserting a new data into the database...");
+  console.log("Inserting a new data into the database...");
 
-    const { nome, email, senha } = dados;
+  const { nome, email, senha, admin } = dados;
 
-    const funcionario = new Funcionario();
+  const funcionario = new Funcionario();
 
-    funcionario.nome = nome;
-    funcionario.email = email;
-    funcionario.senha = await createPasswordHash(senha);
+  funcionario.nome = nome;
+  funcionario.email = email;
+  funcionario.senha = await createPasswordHash(senha);
+  funcionario.admin = admin;
 
-    const createdFuncionario = await repository.save(funcionario);
-    
-    console.log("Saved a new funcionario with id: " + funcionario.id);
-    return createdFuncionario;
+  const createdFuncionario = await repository.save(funcionario);
+
+  console.log("Saved a new funcionario with id: " + funcionario.id);
+  return createdFuncionario;
 }
 
 const createPasswordHash = async (senha: string): Promise<string> => {
-    const saltRounds: number = 10;
-    return hash(senha, saltRounds);
+  const saltRounds: number = 10;
+  return hash(senha, saltRounds);
 };
 
-const autenticaFuncionarioModel = async (dados): Promise<Funcionario> => {
-    const { email, senha } = dados;
+const autenticaFuncionarioModel = async (dados): Promise<AutenticationResult> => {
+  const { email, senha } = dados;
 
-    const funcionario = await repository.findOne({ 
-        where: { email } 
-    });
+  const funcionario = await repository.findOne({
+    where: { email }
+  });
 
-    if (!funcionario) {
-        throw new Error('Funcionario não encontrado');
+  if (!funcionario) {
+    throw new Error('Funcionario não encontrado');
+  }
+
+  const autenticado = await compare(senha, funcionario.senha);
+
+  if (autenticado) {
+    const tipo = (funcionario.admin) ? 'admin' : 'funcionario';
+    const payload = {
+      id: funcionario.id,
+      nome: funcionario.nome,
+      email: funcionario.email,
+      tipo: tipo
     }
-
-    const autenticado = await compare(senha, funcionario.senha);
-
-    if (autenticado) {
-        const token = sign({ id: funcionario.id, email: funcionario.email }, secretKey, { expiresIn: '1h' });
-        return token;
-    } else {
-        throw new Error('Credenciais inválidas');
-    }
+    const token = sign(payload, secretKey, { expiresIn: '1h' });
+    return { token, funcionario: payload };
+  } else {
+    throw new Error('Credenciais inválidas');
+  }
 };
 
 export {
-    getFuncionarioModel,
-    createFuncionarioModel,
-    autenticaFuncionarioModel,
+  getFuncionarioModel,
+  createFuncionarioModel,
+  autenticaFuncionarioModel,
 };

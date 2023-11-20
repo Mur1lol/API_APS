@@ -5,15 +5,15 @@ import { Agendamento } from "./Agendamento";
 
 @Entity()
 export class Funcionario_Funcao {
-    @PrimaryGeneratedColumn()
-    id: number
+  @PrimaryGeneratedColumn()
+  id: number
 
-    @ManyToOne(() => Funcionario, (funcionario) => funcionario.funci_func)
-    funcionario: Funcionario
+  @ManyToOne(() => Funcionario, (funcionario) => funcionario.funci_func)
+  funcionario: Funcionario
 
-    @ManyToOne(() => Funcao, (funcao) => funcao.funci_func)
-    funcao: Funcao
+  @ManyToOne(() => Funcao, (funcao) => funcao.funci_func)
+  funcao: Funcao
 
-    @OneToMany(() => Agendamento, (agendamento) => agendamento.funcionario_funcao)
-    agendamento: Agendamento
+  @OneToMany(() => Agendamento, (agendamento) => agendamento.funcionario_funcao)
+  agendamento: Agendamento
 }

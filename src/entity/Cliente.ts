@@ -5,18 +5,18 @@ import { Agendamento } from "./Agendamento"
 @Entity()
 export class Cliente {
 
-    @PrimaryGeneratedColumn()
-    id: number
+  @PrimaryGeneratedColumn()
+  id: number
 
-    @Column()
-    nome: string
+  @Column()
+  nome: string
 
-    @Column()
-    email: string
+  @Column()
+  email: string
 
-    @Column()
-    senha: string
+  @Column()
+  senha: string
 
-    @OneToMany(() => Agendamento, (agendamento) => agendamento.cliente)
-    agendamento: Agendamento
+  @OneToMany(() => Agendamento, (agendamento) => agendamento.cliente)
+  agendamento: Agendamento
 }
