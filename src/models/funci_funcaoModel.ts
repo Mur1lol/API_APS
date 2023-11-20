@@ -24,7 +24,6 @@ const getAll = async (): Promise<Funcionario_Funcao[]> => {
 };
 
 const getFuncionariosModel = async (funcaoId): Promise<Funcionario_Funcao[]> => {
-  console.log(funcaoId)
   const funci_funcaos = await repository.find({
     where: {
       funcao: { id: funcaoId }

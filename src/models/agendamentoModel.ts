@@ -34,11 +34,11 @@ const getAll = async (): Promise<Agendamento[]> => {
   return agendamentos;
 };
 
-const getAgendamentoMesModel = async (date): Promise<Agendamento[]> => {
-  const { data } = date;
+const getAgendamentoClienteModel = async (clienteId): Promise<Agendamento[]> => {
+  const { userId } = clienteId;
   const agendamentos = await repository.find({
     where: {
-      data: data
+      cliente: { id: userId }
     },
     select: {
       cliente: {
@@ -69,11 +69,11 @@ const getAgendamentoMesModel = async (date): Promise<Agendamento[]> => {
   return agendamentos;
 }
 
-const getAgendamentoClienteModel = async (clienteId): Promise<Agendamento[]> => {
-  const { userId } = clienteId;
+const getAgendamentoFuncionarioModel = async (funcionarioId): Promise<Agendamento[]> => {
+  const { userId } = funcionarioId;
   const agendamentos = await repository.find({
     where: {
-      cliente: { id: userId }
+      funcionario_funcao: { funcionario: { id: userId } }
     },
     select: {
       cliente: {
@@ -123,7 +123,7 @@ const createAgendamento = async (dados): Promise<Agendamento> => {
 
 export {
   getAll,
-  getAgendamentoMesModel,
   getAgendamentoClienteModel,
+  getAgendamentoFuncionarioModel,
   createAgendamento,
 }

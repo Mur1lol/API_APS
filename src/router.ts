@@ -8,21 +8,21 @@ import * as funci_funcaoController from './controllers/funci_funcaoController';
 import * as agendamentoController from './controllers/agendamentoController';
 
 import { validateEmail } from './middlewares/validateEmail';
-import { verifyToken } from './middlewares/verifyToken';
+import { verifyToken, verifyTokenCliente, verifyTokenFuncionario, verifyTokenAdmin } from './middlewares/verifyToken';
 import { validateFieldsCadastro, validateFieldsLogin, validateFieldsAgenda } from './middlewares/validateFields';
 
 /**********************
  * Cliente            *
  **********************/
-router.get('/cliente', verifyToken, clienteController.getCliente);
+router.get('/cliente', verifyTokenCliente, clienteController.getCliente);
 router.post('/cliente', validateFieldsCadastro, validateEmail, clienteController.createCliente);
 router.post('/cliente/login', validateFieldsLogin, clienteController.autenticaCliente);
 
 /**********************
  * Funcionario        *
  **********************/
-router.get('/funcionario', verifyToken, funcionarioController.getFuncionario);
-router.post('/funcionario', validateFieldsCadastro, validateEmail, funcionarioController.createFuncionario);
+router.get('/funcionario', verifyTokenFuncionario, funcionarioController.getFuncionario);
+router.post('/funcionario', verifyTokenAdmin, validateFieldsCadastro, validateEmail, funcionarioController.createFuncionario);
 router.post('/funcionario/login', validateFieldsLogin, funcionarioController.autenticaFuncionario);
 
 /**********************
@@ -36,14 +36,14 @@ router.post('/funcao', funcaoController.createFuncaos);
  **********************/
 router.get('/funci_funcao', funci_funcaoController.getAlls);
 router.get('/funci_funcao/:funcao', funci_funcaoController.getFuncionarios);
-router.post('/funci_funcao', funci_funcaoController.createFuncionario_Funcaos);
+router.post('/funci_funcao', verifyTokenAdmin, funci_funcaoController.createFuncionario_Funcaos);
 
 /**********************
  * Agendamento        *
  **********************/
-router.get('/agendamento', agendamentoController.getAlls);
-router.get('/agendamento/data/:data', agendamentoController.getAgendamentoMes);
-router.get('/agendamento/cliente', verifyToken, agendamentoController.getAgendamentoCliente);
-router.post('/agendamento', validateFieldsAgenda, agendamentoController.createAgendamentos);
+router.get('/agendamento', verifyTokenAdmin, agendamentoController.getAlls);
+router.get('/agendamento/cliente', verifyTokenCliente, agendamentoController.getAgendamentoCliente);
+router.get('/agendamento/funcionario', verifyTokenFuncionario, agendamentoController.getAgendamentoFuncionario);
+router.post('/agendamento', verifyTokenCliente, validateFieldsAgenda, agendamentoController.createAgendamentos);
 
 export default router;
