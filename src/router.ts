@@ -9,7 +9,7 @@ import * as agendamentoController from './controllers/agendamentoController';
 
 import { validateEmail } from './middlewares/validateEmail';
 import { verifyToken, verifyTokenCliente, verifyTokenFuncionario, verifyTokenAdmin } from './middlewares/verifyToken';
-import { validateFieldsCadastro, validateFieldsLogin, validateFieldsAgenda } from './middlewares/validateFields';
+import { validateFieldsCadastro, validateFieldsLogin, validateFieldsAgenda, validateFieldsFunciFuncao } from './middlewares/validateFields';
 
 /**********************
  * Cliente            *
@@ -36,12 +36,12 @@ router.post('/funcao', funcaoController.createFuncaos);
  **********************/
 router.get('/funci_funcao', funci_funcaoController.getAlls);
 router.get('/funci_funcao/:funcao', funci_funcaoController.getFuncionarios);
-router.post('/funci_funcao', verifyTokenAdmin, funci_funcaoController.createFuncionario_Funcaos);
+router.post('/funci_funcao', verifyTokenAdmin, validateFieldsFunciFuncao, funci_funcaoController.createFuncionario_Funcaos);
 
 /**********************
  * Agendamento        *
  **********************/
-router.get('/agendamento', verifyTokenAdmin, agendamentoController.getAlls);
+router.get('/agendamento', verifyToken, agendamentoController.getAlls);
 router.get('/agendamento/cliente', verifyTokenCliente, agendamentoController.getAgendamentoCliente);
 router.get('/agendamento/funcionario', verifyTokenFuncionario, agendamentoController.getAgendamentoFuncionario);
 router.post('/agendamento', verifyTokenCliente, validateFieldsAgenda, agendamentoController.createAgendamentos);

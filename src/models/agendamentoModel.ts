@@ -107,7 +107,8 @@ const getAgendamentoFuncionarioModel = async (funcionarioId): Promise<Agendament
 const createAgendamento = async (dados): Promise<Agendamento> => {
   console.log("Inserting a new data into the database...");
 
-  const { data, hora, id_cliente, id_funcionario_funcao } = dados;
+  const { data, hora, id_funcionario_funcao } = dados.body;
+  const id_cliente = dados['userId'];
 
   const agendamento = new Agendamento();
 

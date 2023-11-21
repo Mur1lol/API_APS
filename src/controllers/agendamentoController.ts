@@ -30,7 +30,7 @@ const getAgendamentoFuncionario = async (req: Request, res: Response) => {
 
 const createAgendamentos = async (req, res) => {
   try {
-    const dados = await createAgendamento(req.body);
+    const dados = await createAgendamento(req);
     return res.status(200).json(dados);
   } catch (error) {
     console.error('Erro durante o registro:', error);
