@@ -12,7 +12,7 @@ const getAlls = async (req: Request, res: Response) => {
 
 const getAgendamentoCliente = async (req: Request, res: Response) => {
   try {
-    const dados = await getAgendamentoClienteModel(req.body);
+    const dados = await getAgendamentoClienteModel(req);
     return res.status(200).json(dados);
   } catch (error) {
     return res.status(500).json({ error: 'Internal Server Error' });
@@ -21,7 +21,7 @@ const getAgendamentoCliente = async (req: Request, res: Response) => {
 
 const getAgendamentoFuncionario = async (req: Request, res: Response) => {
   try {
-    const dados = await getAgendamentoFuncionarioModel(req.body);
+    const dados = await getAgendamentoFuncionarioModel(req);
     return res.status(200).json(dados);
   } catch (error) {
     return res.status(500).json({ error: 'Internal Server Error' });

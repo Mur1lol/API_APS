@@ -35,7 +35,7 @@ const getAll = async (): Promise<Agendamento[]> => {
 };
 
 const getAgendamentoClienteModel = async (clienteId): Promise<Agendamento[]> => {
-  const { userId } = clienteId;
+  const userId = clienteId['userId'];
   const agendamentos = await repository.find({
     where: {
       cliente: { id: userId }
@@ -70,7 +70,7 @@ const getAgendamentoClienteModel = async (clienteId): Promise<Agendamento[]> => 
 }
 
 const getAgendamentoFuncionarioModel = async (funcionarioId): Promise<Agendamento[]> => {
-  const { userId } = funcionarioId;
+  const userId = funcionarioId['userId'];
   const agendamentos = await repository.find({
     where: {
       funcionario_funcao: { funcionario: { id: userId } }
@@ -107,7 +107,7 @@ const getAgendamentoFuncionarioModel = async (funcionarioId): Promise<Agendament
 const createAgendamento = async (dados): Promise<Agendamento> => {
   console.log("Inserting a new data into the database...");
 
-  const { data, hora, id_funcionario_funcao } = dados.body;
+  const { data, hora, funciFuncao } = dados.body;
   const id_cliente = dados['userId'];
 
   const agendamento = new Agendamento();
@@ -115,7 +115,7 @@ const createAgendamento = async (dados): Promise<Agendamento> => {
   agendamento.data = data;
   agendamento.hora = hora;
   agendamento.cliente = id_cliente;
-  agendamento.funcionario_funcao = id_funcionario_funcao;
+  agendamento.funcionario_funcao = funciFuncao;
 
   const createdAgendamento = await repository.save(agendamento);
 

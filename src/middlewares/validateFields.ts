@@ -45,6 +45,7 @@ const validateFieldsAgenda = async (req: Request, res: Response, next: NextFunct
 
   if (body.data == '' || body.data == undefined) { return res.status(400).json({ message: 'The field `data` is required and cannot be empty!' }); }
   if (body.hora == '' || body.hora == undefined) { return res.status(400).json({ message: 'The field `hora` is required and cannot be empty!' }); }
+  if (body.funciFuncao == '' || body.funciFuncao == undefined) { return res.status(400).json({ message: 'The field `funciFuncao` is required and cannot be empty!' }); }
 
   if (horarios.indexOf(body.hora) <= -1) {
     return res.status(400).json({ message: 'The field `hora` is wrong!' });

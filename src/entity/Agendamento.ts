@@ -8,7 +8,7 @@ export class Agendamento {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column({ type: 'timestamptz' })
+  @Column({ type: 'date' })
   data: Date;
 
   @Column()
