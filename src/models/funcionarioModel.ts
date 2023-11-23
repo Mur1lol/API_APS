@@ -27,14 +27,17 @@ const getFuncionarioModel = async (userId): Promise<Funcionario> => {
 const createFuncionarioModel = async (dados): Promise<Funcionario> => {
   console.log("Inserting a new data into the database...");
 
-  const { nome, email, senha, admin } = dados;
+  const { nome, email, senha, admin } = dados.body;
+  const ad = dados['admin'];
+
+  console.log(admin, ad)
 
   const funcionario = new Funcionario();
 
   funcionario.nome = nome;
   funcionario.email = email;
   funcionario.senha = await createPasswordHash(senha);
-  funcionario.admin = admin;
+  funcionario.admin = admin || ad;
 
   const createdFuncionario = await repository.save(funcionario);
 

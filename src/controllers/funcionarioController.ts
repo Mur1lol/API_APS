@@ -13,7 +13,7 @@ const getFuncionario = async (req: Request, res: Response) => {
 
 const createFuncionario = async (req, res) => {
   try {
-    const dados = await createFuncionarioModel(req.body);
+    const dados = await createFuncionarioModel(req);
     return res.status(200).json({ sucess: 'Funcionario Cadastrado!' });
   } catch (error) {
     console.error('Erro durante o registro:', error);
