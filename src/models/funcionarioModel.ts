@@ -16,6 +16,11 @@ type AutenticationResult = {
   }
 }
 
+type CreationResult = {
+  sucess: string;
+  id: number;
+}
+
 const secretKey = process.env.TOKEN;
 const repository = AppDataSource.getRepository(Funcionario);
 
@@ -24,7 +29,7 @@ const getFuncionarioModel = async (userId): Promise<Funcionario> => {
   return funcionarios;
 };
 
-const createFuncionarioModel = async (dados): Promise<Funcionario> => {
+const createFuncionarioModel = async (dados): Promise<CreationResult> => {
   console.log("Inserting a new data into the database...");
 
   const { nome, email, senha, admin } = dados.body;
@@ -42,7 +47,7 @@ const createFuncionarioModel = async (dados): Promise<Funcionario> => {
   const createdFuncionario = await repository.save(funcionario);
 
   console.log("Saved a new funcionario with id: " + funcionario.id);
-  return createdFuncionario;
+  return { sucess: 'Funcionario Cadastrado!', id: funcionario.id};
 }
 
 const createPasswordHash = async (senha: string): Promise<string> => {

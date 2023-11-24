@@ -14,7 +14,7 @@ const getFuncionario = async (req: Request, res: Response) => {
 const createFuncionario = async (req, res) => {
   try {
     const dados = await createFuncionarioModel(req);
-    return res.status(200).json({ sucess: 'Funcionario Cadastrado!' });
+    return res.status(200).json({ dados });
   } catch (error) {
     console.error('Erro durante o registro:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
