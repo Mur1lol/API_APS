@@ -35,8 +35,6 @@ const createFuncionarioModel = async (dados): Promise<CreationResult> => {
   const { nome, email, senha, admin } = dados.body;
   const ad = dados['admin'];
 
-  console.log(admin, ad)
-
   const funcionario = new Funcionario();
 
   funcionario.nome = nome;

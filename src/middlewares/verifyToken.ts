@@ -69,7 +69,6 @@ const verifyTokenFuncionario = (req: Request, res: Response, next: NextFunction)
 
 const verifyTokenAdmin = async (req: Request, res: Response, next: NextFunction) => {
   const existingFuncionario = await AppDataSource.getRepository(Funcionario).find();
-  console.log(existingFuncionario)
   if (existingFuncionario > []) {
     
     const token = req.headers.authorization.split(' ')[1];
